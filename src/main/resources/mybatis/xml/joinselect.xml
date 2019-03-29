@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.dao.URRMapper">
+	<!-- select * from t_user tu inner join t_user_role tur on tu.id=tur.userId 
+		-> inner join t_role tr on tur.roleId=tr.id; UserRole FindUserRoleByName(String 
+		name); id | username | password| enable | userId | roleId | id | roleKey 
+		| roleDesc -->
+	<resultMap type="com.example.demo.model.UserRole" id="UserRoleMap">
+		<constructor>
+			<idArg column="tu.id" javaType="int" />
+		</constructor>
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="enable" property="enable" />
+		<collection property="trole" ofType="TRole">
+			<id column="tr.id" property="id" />
+			<result column="roleKey" property="roleKey" />
+			<result column="roleDesc" property="roleDesc" />
+		</collection>
+	</resultMap>
+	<select id="FindUserRoleByName" resultMap="UserRoleMap">
+		SELECT
+		tu.id,
+		tu.username,
+		tu.password,
+		tu.enable,
+		tr.roleKey,
+		tr.roleDesc
+		FROM
+		t_user tu
+		LEFT JOIN
+		t_user_role tur ON tu.id = tur.userId
+		LEFT JOIN
+		t_role tr ON tur.roleId = tr.id
+		where tu.username=#{name}
+	</select>
+	<select id="FindAllUserRole" resultMap="UserRoleMap">
+		SELECT 
+    tu.id ,
+    tu.username username,
+    tu.password password,
+    tu.enable enable,
+    tr.roleKey roleKey,
+    tr.roleDesc roleDesc
+FROM
+    t_user tu
+        LEFT JOIN
+    t_user_role tur ON tu.id = tur.userId
+        LEFT JOIN
+    t_role tr ON tur.roleId = tr.id
+	</select>
+	<resultMap type="com.example.demo.model.ResourceRole" id="ResourceRoleMap">
+		<constructor>
+			<idArg column="id" javaType="int" />
+		</constructor>
+		<result column="name" property="name" />
+		<result column="parentId" property="parentId" />
+		<result column="resKey" property="resKey" />
+		<result column="resUrl" property="resUrl" />
+		<result column="sort" property="sort" />
+		<result column="type" property="type" />
+		<collection property="trole" ofType="TRole">
+			<id column="rid" property="id" />
+			<result column="roleKey" property="roleKey" />
+			<result column="roleDesc" property="roleDesc" />
+		</collection>
+	</resultMap>
+	<select id="FindAllResourceRole" resultMap="ResourceRoleMap">
+		SELECT 
+    trs.id id,
+    trs.name name,
+    trs.parentId parentId,
+    trs.resKey resKey,
+    trs.resUrl resUrl,
+    trs.sort sort,
+    trs.type type,
+    tr.id rid,
+    tr.roleKey roleKey,
+    tr.roleDesc roleDesc
+FROM
+    t_resources trs
+        LEFT JOIN
+    t_role_resources trr ON trs.id = trr.resourcesId
+        LEFT JOIN
+    t_role tr ON trr.roleId = tr.id;
+	</select>
+	<select id="FindResourceRoleByName" resultMap="ResourceRoleMap">
+		SELECT 
+    trs.id id,
+    trs.name name,
+    trs.parentId parentId,
+    trs.resKey resKey,
+    trs.resUrl resUrl,
+    trs.sort sort,
+    trs.type type,
+    tr.id rid,
+    tr.roleKey roleKey,
+    tr.roleDesc role Desc
+FROM
+    t_resources trs
+        LEFT JOIN
+    t_role_resources trr ON trs.id = trr.resourcesId
+        LEFT JOIN
+    t_role tr ON trr.roleId = tr.id;
+    where resUrl=#{resource}
+	</select>
+</mapper>
