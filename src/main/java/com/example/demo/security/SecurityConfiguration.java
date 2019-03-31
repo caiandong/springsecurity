@@ -15,7 +15,6 @@ import org.springframework.security.web.authentication.rememberme.JdbcTokenRepos
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 @Configuration
-@Import({MyFilterInvocationSecurityMetadataSource.class})
 public class SecurityConfiguration {
 
 	@Bean
@@ -24,18 +23,4 @@ public class SecurityConfiguration {
 		jdbcTokenRepositoryImpl.setDataSource(dataSource);
 		return jdbcTokenRepositoryImpl;
 	}
-	@Bean
-	public MyDAOAuthorizationConfigurer myDAOAuthorizationConfigurer(FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource) {
-		 MyDAOAuthorizationConfigurer myDAOAuthorizationConfigurer = new MyDAOAuthorizationConfigurer();
-		 myDAOAuthorizationConfigurer.setFilterInvocationSecurityMetadataSource(filterInvocationSecurityMetadataSource);
-		 return myDAOAuthorizationConfigurer;
-	}
-//	@Bean
-//	public DAOAuthorization filterInvocationSecurityMetadataSource(FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource) {
-//		DAOAuthorization daoAuthorization = new DAOAuthorization();
-//		daoAuthorization.setAccessDecisionManager(new AffirmativeBased(Arrays.asList(new RoleVoter())));
-//		daoAuthorization.setSecurityMetadataSource(filterInvocationSecurityMetadataSource);
-//		
-//		return daoAuthorization;
-//	}
 }

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="link">
+	<link rel="stylesheet"		th:href="@{/vendor/simple-line-icons/css/simple-line-icons.css}">
+	<link rel="stylesheet"		th:href="@{/vendor/font-awesome/css/fontawesome-all.min.css}">
+	<link rel="stylesheet" 	th:href="@{/css/styles.css}">
+</th:block>
+<body>
+<th:block th:fragment="script">
+<script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+<script th:src="@{/vendor/popper.js/popper.min.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/vendor/chart.js/chart.min.js}"></script>
+<script th:src="@{/js/carbon.js}"></script>
+<script th:src="@{/js/demo.js}"></script>
+</th:block>
+</body>
+</html>
