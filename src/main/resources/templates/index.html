@@ -66,7 +66,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security/">
                         <i class="fa fa-wrench"></i> Settings
                     </a>
 
-                    <a th:href="@{/logout}" class="dropdown-item">
+                    <a th:href="@{/root/logout}" class="dropdown-item">
                         <i class="fa fa-lock"></i> Logout
                     </a>
                 </div>
@@ -209,9 +209,12 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security/">
                             </li>
 
                             <li class="nav-item">
-                                <a th:href="@{/login}" class="nav-link">
+                               <!--  <a th:href="@{/login}" class="nav-link">
                                     <i class="icon icon-umbrella"></i> Login
-                                </a>
+                                </a> -->
+                                <span id="denglu" class="nav-link mydenglu" th:src="@{/login}">
+                                    <i class="icon icon-umbrella"></i> Login
+                                </span>
                             </li>
 
                             <li class="nav-item">
@@ -356,5 +359,24 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security/">
     </div>
 </div>
 <script th:replace="common::script"></script>
+<!-- <script th:src="@{/js/denglu.js}"></script> -->
+<script type="text/javascript">
+$("#denglu.mydenglu").click(function (){
+	var ww=window.open($(this).attr("src"));
+
+	var timerId = setInterval(function(){
+		$.getJSON("[[@{/userstatus}]]", function(response){
+			alert(response);
+		if (response==true){
+			clearInterval(timerId)
+			ww.close()
+			window.location.reload()
+		}
+		}) 
+		}, 2000);
+});
+
+
+</script>
 </body>
 </html>

@@ -1,6 +1,11 @@
 package com.example.demo.security;
 
+import java.io.IOException;
 import java.util.Arrays;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,10 +18,13 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 @Configuration
@@ -34,6 +42,7 @@ public class HttpSecurityconfigure extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/css/*","/js/*","/vendor/*","/imgs/*","/favicon.ico");
+		web.debug(true);
 	}
 	
 	@Override
@@ -53,8 +62,9 @@ public class HttpSecurityconfigure extends WebSecurityConfigurerAdapter {
 			.and()
 		.formLogin().loginPage("/login").permitAll()
 			.loginProcessingUrl("/root/login")
-			.defaultSuccessUrl("/index")
-			.failureUrl("/root/login?error")
+			//会被successhandler覆盖
+			.defaultSuccessUrl("/root/index")
+			.failureUrl("/login?error").successHandler(getHandler("/root/index"))
 		.and()
 		.csrf().disable()
 		.rememberMe().tokenRepository(jdbcTokenRepositoryImpl)
@@ -72,6 +82,14 @@ public class HttpSecurityconfigure extends WebSecurityConfigurerAdapter {
 		//http.addFilterBefore(filter, beforeFilter)
 	}
 
+	private AuthenticationSuccessHandler getHandler(String url) {
+		
+		MySuccessHandler handler = new MySuccessHandler();
+		handler.setAlwaysUseDefaultTargetUrl(false);
+		handler.setDefaultTargetUrl(url); 
+		return handler;
+	}
+
 	private class MyDAOAuthorizationConfigurer extends AbstractHttpConfigurer<MyDAOAuthorizationConfigurer, HttpSecurity> {	
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
@@ -82,5 +100,19 @@ public class HttpSecurityconfigure extends WebSecurityConfigurerAdapter {
 			daoAuthorization.setSecurityMetadataSource(securityMetadataSource);
 			http.addFilterBefore(daoAuthorization, FilterSecurityInterceptor.class);
 		}
+	}
+	private class MySuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler{
+				
+			@Override
+			public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+					Authentication authentication) throws IOException, ServletException {
+				String parameter = request.getParameter("_closeAfter");
+				if(parameter==null||"".equals(parameter))
+					super.onAuthenticationSuccess(request, response, authentication);
+				response.setContentType("text/html;charset=UTF-8");
+				response.getWriter().print("<script type=\"text/javascript\">" + 
+						"            window.close();</script>");
+			}
+		
 	}
 }

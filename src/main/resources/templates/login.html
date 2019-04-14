@@ -17,6 +17,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
         						
             <div class="col-md-5">
             <form th:action="@{/root/login}" method="post">
+            							<input th:if="${param.back}" hidden="" name="_closeAfter" value="en">
                 <div class="card p-4">
                     <div class="card-header text-center text-uppercase h4 font-weight-light">
                         Login

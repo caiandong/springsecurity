@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,17 @@ import com.example.demo.model.TUser;
 import com.example.demo.service.RegistrationService;
 import com.example.demo.util.RegistrationException;
 
-//@Controller
+@Controller
 public class UserController {
 @Autowired
 private RegistrationService registrationService;
+
+@RequestMapping("/userstatus")
+@ResponseBody
+public boolean getstatus(@AuthenticationPrincipal UserDetails user) {
+//	return user==null?"{'status':'no'}":"{'status':'yes'}";
+	return user==null?false:true;
+}
 @PostMapping("/registration")
 public String registration(TUser tUser,BindingResult userResult,
 		TRegistration registration,BindingResult RegistrationResult,
@@ -43,8 +51,7 @@ public Authentication hha() {
 }
 @RequestMapping("/")
 public String index() {
-	if(SecurityContextHolder.getContext().getAuthentication()!=null)
-		return "index";
-	return "login";
+//	return "forward:/root/index";
+	return "redirect:/root/index";
 }
 }

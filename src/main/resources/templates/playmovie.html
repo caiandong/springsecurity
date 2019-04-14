@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Carbon - Admin Template</title>
+    <link th:replace="common::link">
+</head>
+<body>
+	<div class="page-wrapper flex-row align-items-center">
+		<div class="container">
+			<ul id="root">
+		<!-- 	<li>
+			<video controls="controls" >
+					<source src="修女.mp4" type="video/mp4" />
+					<source src="dongwuwangchao05.mp4" type="video/mp4" />
+					<source src="/i/movie.webm" type="video/webm" />
+				</video>
+			</li>	 -->		
+			</ul>
+		</div>
+	</div>
+	<button id="denglu" class="mydenglu" th:src="@{/login?back=yes}">hshhas</button>
+	<script th:replace="common::script"></script>
+	
+<script type="text/javascript">
+/* $("#denglu.mydenglu").click(function (){
+	window.open("[[@{/login?back=yes}]]");
+}); */
+	$(function(){
+		$.ajax({ 
+			url: "/getmovienames", 
+			type: "get", 
+			success: function(data){
+				$.each( data, function(i, n){
+					/* var source1=$("<source/>").attr({"src":"/movie"+n,"type":"video/mp4"});
+					var source2=$("<source/>").attr({"src":"/movie"+n,"type":"video/mkv"});				  
+					var video=$("<video controls=\"controls\"></video>").append(source1)
+					.append(source2);
+					  var ul=$("ul#root").append($("<li></li>").append(video)); */
+					  //var a=$("<a></a>").attr({"href":"/movie"+n}).text(n);
+					  var a=$("<a></a>").attr({"href":"/plyr?movie="+n}).text(n);
+					  var li=$("<li></li>").append(a);
+					  $("ul#root").append(li);
+					});
+		}});
+	});
+</script>
+<script th:src="@{/js/denglu.js}"></script>
+</body>
+</html>
