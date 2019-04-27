@@ -1,4 +1,4 @@
-# springsecurity
+# springAdmin
 ## 遇到的问题
 
 - #### 权限的同步问题
@@ -41,17 +41,63 @@
   })
   ```
 
-- 在@ResponseBody后返回的字符串并不是json对象，它并不会被解析成application/json类型。因为它没有被json对象序列化器解析。所以ajax请求的回调方法无法收到string。
+- #### 在@ResponseBody后返回的字符串即使是json字符串，但它并不会被解析成application/json类型。
 
-- 下载和浏览是两种东西，但浏览器都把它们看待成资源，
+  - 因为它没有被json对象序列化器解析，所以ajax请求的回调方法无法收到string。除非手动设置其content-type，利用`@PostMapping(path = "/pets", consumes = "application/json") `和`@GetMapping(path = "/pets/{petId}", produces = "application/json;charset=UTF-8")`
+
+- #### 根据框架中的静态资源处理，抄出来一个处理视频播放的Controller.这是为了防止直接输入资源位置播放，而绕过权限。
+
+- #### 把目录操作抽取出来，封装成线程安全的类。
+
+  - 返回可获取的文件名(与页面被访问次数正比，多次被调用)
+  - 增加新的文件的目录(调用次数不固定，少数管理员会并发调用)
+  - 根据文件名找出对应播放路径(与播放`请求`次数成正比，非常多次)
 
 - 
 
-- 
+- 获取上传视频的时长.网上搜的
 
-- 
+  ```html
+  <!DOCTYPE html>  
+  <html>  
+  	<head>  
+  	    <meta charset="UTF-8">  
+  	    <title>js获取上传视频的时长</title>  
+  	</head>  
+  	<body>  
+  	   <video style="display:none;" controls="controls" id="aa" oncanplaythrough="myFunction(this)">
+  	   	
+  	   </video>
+  	   <input type="file" onchange="changeFile(this)" />
+  	   <br />
+  	   <span id="getDuration"></span>
+  	</body> 
+  	<script type="text/javascript">  
+  		function myFunction(ele) {
+  			var hour = parseInt((ele.duration)/3600);
+  			var minute = parseInt((ele.duration%3600)/60);
+  			var second = Math.ceil(ele.duration%60);
+  			//console.log(Math.floor(ele.duration));
+  			//document.write("这段视频的时长为："+hour+"小时，"+minute+"分，"+second+"秒");
+  			document.getElementById("getDuration").innerHTML="这段视频的时长为："+hour+"小时，"+minute+"分，"+second+"秒";
+  		}  
+  	      
+  		function changeFile(ele){  
+  		    var video = ele.files[0];  
+  		    var url = URL.createObjectURL(video);  
+  		    console.log(url);  
+  		    document.getElementById("aa").src = url;  
+  		}  
+  	</script>  
+   
+  </html> 
+  ```
 
-- 
+  
+
+- 在上传前获取视频文件截图作为封面一起上传
+
+  - 文章太大，贴上连接，但愿不会丢失[解决方案](https://segmentfault.com/a/1190000010910097)
 
 - 
 
@@ -76,42 +122,3 @@
   ```
 
   
-# admins
-
-#### 介绍
-{**以下是码云平台说明，您可以替换此简介**
-码云是开源中国推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用码云实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
-
-#### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxxx
-
-#### 参与贡献
-
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)

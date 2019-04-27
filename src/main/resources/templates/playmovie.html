@@ -1,52 +1,84 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Carbon - Admin Template</title>
-    <link th:replace="common::link">
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Carbon - Admin Template</title>
+<link th:replace="common::link">
 </head>
-<body>
-	<div class="page-wrapper flex-row align-items-center">
+<body >
+	<div id="first" style="margin: 10px auto;width: 90%">
+		<ul>
+		
+		</ul>
+		<form style="float: left" action="/root/adddir" method="post">
+			<div style="display: inline-block;" id="checkboxes">
+				
+			</div>
+			<input type="text" name="dirs"/>
+			<input type="text" name="dirs"/>
+			<input type="submit" value="fuck you"/>
+			
+		</form>
+		<a style="float: right" id="restore" href="/root/restore">恢复默认</a>
+	</div>
+
+	<div style="clear: both;" class="page-wrapper flex-row align-items-center">
 		<div class="container">
 			<ul id="root">
-		<!-- 	<li>
+				<!-- 	<li>
 			<video controls="controls" >
 					<source src="修女.mp4" type="video/mp4" />
 					<source src="dongwuwangchao05.mp4" type="video/mp4" />
 					<source src="/i/movie.webm" type="video/webm" />
 				</video>
-			</li>	 -->		
+			</li>	 -->
 			</ul>
 		</div>
 	</div>
 	<button id="denglu" class="mydenglu" th:src="@{/login?back=yes}">hshhas</button>
 	<script th:replace="common::script"></script>
-	
-<script type="text/javascript">
-/* $("#denglu.mydenglu").click(function (){
-	window.open("[[@{/login?back=yes}]]");
-}); */
-	$(function(){
-		$.ajax({ 
-			url: "/getmovienames", 
-			type: "get", 
-			success: function(data){
-				$.each( data, function(i, n){
-					/* var source1=$("<source/>").attr({"src":"/movie"+n,"type":"video/mp4"});
-					var source2=$("<source/>").attr({"src":"/movie"+n,"type":"video/mkv"});				  
-					var video=$("<video controls=\"controls\"></video>").append(source1)
-					.append(source2);
-					  var ul=$("ul#root").append($("<li></li>").append(video)); */
-					  //var a=$("<a></a>").attr({"href":"/movie"+n}).text(n);
-					  var a=$("<a></a>").attr({"href":"/plyr?movie="+n}).text(n);
-					  var li=$("<li></li>").append(a);
-					  $("ul#root").append(li);
+
+	<script type="text/javascript">
+		/* $("#denglu.mydenglu").click(function (){
+		 window.open("[[@{/login?back=yes}]]");
+		 }); */
+		$(function() {
+			$.ajax({
+				url : "/getmovienames",
+				type : "get",
+				success : function(data) {
+					if (data.status != 0)
+						return;
+					$.each(data.listdata, function(i, n) {
+						/* var source1=$("<source/>").attr({"src":"/movie"+n,"type":"video/mp4"});
+						var source2=$("<source/>").attr({"src":"/movie"+n,"type":"video/mkv"});				  
+						var video=$("<video controls=\"controls\"></video>").append(source1)
+						.append(source2);
+						  var ul=$("ul#root").append($("<li></li>").append(video)); */
+						//var a=$("<a></a>").attr({"href":"/movie"+n}).text(n);
+						var a = $("<a></a>").attr({
+							"href" : "/plyr?movie=" + n
+						}).text(n);
+						var li = $("<li></li>").append(a);
+						$("ul#root").append(li);
 					});
-		}});
-	});
-</script>
-<script th:src="@{/js/denglu.js}"></script>
+					$.each(data.mapdata.namesuffix,function(i,n){
+						var input=$("<input name=\"suffix\" type=\"checkbox\" />").val(n);
+						var span=$("<span></span>").append(n).append(input);
+						$("#checkboxes").append(span);
+					});
+					$.each(data.mapdata.dir,function(i,n){
+						
+						var li=$("<li></li>").text(n);
+						$("#first ul").append(li);
+					});
+				}
+			});
+		});
+	</script>
+	<script th:src="@{/js/denglu.js}"></script>
 </body>
 </html>
