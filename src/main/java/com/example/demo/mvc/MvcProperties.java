@@ -18,7 +18,17 @@ public class MvcProperties {
 	private String[] mappingdirs;
 	
 	private List<String> filesuffix;
+	
+	private String ImageUpload;
 
+
+	public String getImageUpload() {
+		return ImageUpload;
+	}
+
+	public void setImageUpload(String imageUpload) {
+		ImageUpload = imageUpload;
+	}
 
 	public List<String> getFilesuffix() {
 		return filesuffix;

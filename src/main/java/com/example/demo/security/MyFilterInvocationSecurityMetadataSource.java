@@ -84,7 +84,6 @@ public class MyFilterInvocationSecurityMetadataSource implements
 	//@EventListener({ContextRefreshedEvent.class})
 	public void refreshmap() {
 		logger.debug("初始化所有权限");
-		logger.error("初始化所有权限");
 		List<ResourceRole> allResourceWithRole=SS.FindAllResourceWithRole();	
 		requestMap=new HashMap<>();
 		allResourceWithRole.stream().forEach(ur->{	//

@@ -62,6 +62,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 		registry.addViewController("/root/index").setViewName("index");
 		registry.addViewController("/forms").setViewName("forms");
 		registry.addViewController("/playmovie").setViewName("playmovie");
+		registry.addViewController("/uploadimage").setViewName("image-uploadp");
 	}
 
 	@Override
@@ -71,6 +72,6 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//		registry.addResourceHandler("/movie/**").addResourceLocations( mvc.GetMovieDirMapping() );
+		registry.addResourceHandler("/imageupload/**").addResourceLocations( mvc.getImageUpload());
 	}
 }

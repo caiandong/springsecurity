@@ -17,7 +17,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair;
 
-@Configuration
+//@Configuration
 public class RedisCacheM {
 	@Bean	//不使用jdk默认序列化器
 	@Primary
